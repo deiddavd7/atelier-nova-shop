@@ -21,6 +21,10 @@ Apri `index.html` nel browser.
 - Soglia spedizione gratuita demo
 - Checkout demo pronto per integrazione futura
 - Messaggi a schermo per azioni e form contatti
+- Sezione processo con immagine editoriale dedicata
+- Portfolio con metriche progetto
+- Pacchetti servizi e testimonial
+- Footer con navigazione rapida
 
 ## Prossimi step consigliati
 
