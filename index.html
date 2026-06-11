@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Atelier Nova | Portfolio Shop</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top" aria-label="Atelier Nova home">
+      <span class="brand-mark">AN</span>
+      <span>Atelier Nova</span>
+    </a>
+    <nav class="main-nav" aria-label="Navigazione principale">
+      <a href="#portfolio">Portfolio</a>
+      <a href="#shop">Shop</a>
+      <a href="#about">Studio</a>
+      <a href="#contact">Contatti</a>
+    </nav>
+    <button class="cart-toggle" type="button" aria-label="Apri carrello">
+      <span class="cart-icon" aria-hidden="true">Bag</span>
+      <span id="cartCount">0</span>
+    </button>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <img class="hero-image" src="assets/hero-shop.png" alt="Oggetti di design artigianale per portfolio e shop online">
+      <div class="hero-overlay"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Portfolio shop indipendente</p>
+        <h1>Atelier Nova</h1>
+        <p class="hero-copy">Oggetti, stampe e micro-collezioni per case luminose, studi creativi e regali con carattere.</p>
+        <div class="hero-actions">
+          <a class="button primary" href="#shop">Scopri lo shop</a>
+          <a class="button secondary" href="#portfolio">Vedi lavori</a>
+        </div>
+      </div>
+    </section>
+
+    <section class="stats" aria-label="Punti chiave dello studio">
+      <div>
+        <strong>36</strong>
+        <span>pezzi in collezione</span>
+      </div>
+      <div>
+        <strong>12</strong>
+        <span>progetti editoriali</span>
+      </div>
+      <div>
+        <strong>48h</strong>
+        <span>preparazione ordini</span>
+      </div>
+    </section>
+
+    <section class="section" id="portfolio">
+      <div class="section-heading">
+        <p class="eyebrow">Portfolio</p>
+        <h2>Lavori selezionati</h2>
+      </div>
+      <div class="portfolio-grid">
+        <article class="work-card color-sage">
+          <span>Brand identity</span>
+          <h3>Linea carta per studio floreale</h3>
+          <p>Palette morbida, pattern botanici e packaging coordinato per vendita fisica e online.</p>
+        </article>
+        <article class="work-card color-coral">
+          <span>Product styling</span>
+          <h3>Campagna capsule casa</h3>
+          <p>Direzione visiva e set fotografico per oggetti in ceramica, lino e legno naturale.</p>
+        </article>
+        <article class="work-card color-ink">
+          <span>Editorial design</span>
+          <h3>Mini catalogo stagionale</h3>
+          <p>Layout, copy e schede prodotto per una collezione limitata di stampe d'autore.</p>
+        </article>
+      </div>
+    </section>
+
+    <section class="section shop-section" id="shop">
+      <div class="section-heading shop-heading">
+        <div>
+          <p class="eyebrow">Shop</p>
+          <h2>Collezione pronta</h2>
+        </div>
+        <div class="filters" role="group" aria-label="Filtra prodotti">
+          <button class="filter active" type="button" data-filter="all">Tutto</button>
+          <button class="filter" type="button" data-filter="print">Stampe</button>
+          <button class="filter" type="button" data-filter="home">Casa</button>
+          <button class="filter" type="button" data-filter="paper">Carta</button>
+        </div>
+      </div>
+      <div class="product-grid" id="productGrid"></div>
+    </section>
+
+    <section class="studio-band" id="about">
+      <div>
+        <p class="eyebrow">Studio</p>
+        <h2>Piccole serie, molta cura.</h2>
+      </div>
+      <p>Atelier Nova combina direzione creativa, artigianato e vendita online. Ogni prodotto nasce da un progetto visivo: prima l'idea, poi il prototipo, infine una tiratura sostenibile e numerata.</p>
+    </section>
+
+    <section class="section contact-section" id="contact">
+      <div class="section-heading">
+        <p class="eyebrow">Contatti</p>
+        <h2>Parliamo del prossimo pezzo</h2>
+      </div>
+      <form class="contact-form">
+        <label>
+          Nome
+          <input type="text" name="name" placeholder="Il tuo nome">
+        </label>
+        <label>
+          Email
+          <input type="email" name="email" placeholder="nome@email.com">
+        </label>
+        <label>
+          Messaggio
+          <textarea name="message" rows="4" placeholder="Raccontami cosa vuoi creare o acquistare"></textarea>
+        </label>
+        <button class="button primary" type="submit">Invia richiesta</button>
+      </form>
+    </section>
+  </main>
+
+  <aside class="cart-panel" id="cartPanel" aria-label="Carrello" aria-hidden="true">
+    <div class="cart-header">
+      <h2>Carrello</h2>
+      <button class="icon-button" type="button" id="closeCart" aria-label="Chiudi carrello">×</button>
+    </div>
+    <div class="cart-items" id="cartItems"></div>
+    <div class="cart-footer">
+      <p class="cart-note" id="cartNote">Spedizione gratuita da €80. Resi entro 14 giorni.</p>
+      <div class="cart-total">
+        <span>Totale</span>
+        <strong id="cartTotal">€0</strong>
+      </div>
+      <button class="button primary checkout" id="checkoutButton" type="button">Checkout demo</button>
+    </div>
+  </aside>
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <div class="scrim" id="scrim"></div>
+
+  <script src="script.js"></script>
+</body>
+</html>
