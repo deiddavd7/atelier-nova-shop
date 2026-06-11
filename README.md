@@ -25,6 +25,11 @@ Apri `index.html` nel browser.
 - Portfolio con metriche progetto
 - Pacchetti servizi e testimonial
 - Footer con navigazione rapida
+- Meta SEO, Open Graph, favicon e file `robots.txt`
+- Modal dettagli prodotto con materiali, formato e disponibilità
+- Checkout demo con form e conferma ordine
+- Newsletter demo e FAQ
+- Skip link, focus visibile e miglioramenti accessibilità
 
 ## Prossimi step consigliati
 

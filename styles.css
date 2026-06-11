@@ -26,6 +26,15 @@ body {
   font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
+body.modal-open {
+  overflow: hidden;
+}
+
+:focus-visible {
+  outline: 3px solid rgba(201, 113, 90, 0.7);
+  outline-offset: 3px;
+}
+
 a {
   color: inherit;
   text-decoration: none;
@@ -35,6 +44,29 @@ button,
 input,
 textarea {
   font: inherit;
+}
+
+input,
+textarea {
+  min-width: 0;
+}
+
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 100;
+  padding: 10px 14px;
+  color: var(--white);
+  background: var(--ink);
+  border-radius: 999px;
+  font-weight: 800;
+  transform: translateY(-140%);
+  transition: transform 160ms ease;
+}
+
+.skip-link:focus {
+  transform: translateY(0);
 }
 
 .site-header {
@@ -49,6 +81,10 @@ textarea {
   background: rgba(250, 247, 240, 0.88);
   border-bottom: 1px solid var(--line);
   backdrop-filter: blur(18px);
+}
+
+#main {
+  scroll-margin-top: 120px;
 }
 
 .brand {
@@ -177,7 +213,9 @@ textarea {
 }
 
 .button,
-.filter {
+.filter,
+.details-button,
+.add-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -504,6 +542,12 @@ textarea {
   cursor: pointer;
 }
 
+.details-button:hover,
+.filter:hover,
+.button.secondary:hover {
+  border-color: rgba(28, 31, 33, 0.32);
+}
+
 .studio-band {
   display: grid;
   grid-template-columns: 0.8fr 1.2fr;
@@ -636,7 +680,10 @@ textarea {
 }
 
 .contact-form input,
-.contact-form textarea {
+.contact-form textarea,
+.newsletter-form input,
+.modal input,
+.modal textarea {
   width: 100%;
   border: 1px solid var(--line);
   border-radius: 8px;
@@ -645,9 +692,39 @@ textarea {
   color: var(--ink);
 }
 
+.faq-section {
+  background: var(--white);
+}
+
+.faq-list {
+  display: grid;
+  gap: 12px;
+  max-width: var(--max);
+  margin: 0 auto;
+}
+
+.faq-list details {
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: #fff;
+}
+
+.faq-list summary {
+  cursor: pointer;
+  padding: 20px 22px;
+  font-weight: 900;
+}
+
+.faq-list p {
+  margin: 0;
+  padding: 0 22px 22px;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .site-footer {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr minmax(280px, 420px) auto;
   gap: 24px;
   align-items: end;
   padding: 34px clamp(18px, 5vw, 56px);
@@ -667,6 +744,30 @@ textarea {
   flex-wrap: wrap;
   gap: 18px;
   font-weight: 800;
+}
+
+.newsletter-form {
+  display: grid;
+  gap: 10px;
+}
+
+.newsletter-form label {
+  font-weight: 900;
+}
+
+.newsletter-form div {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 10px;
+}
+
+.legal-line {
+  grid-column: 1 / -1;
+  max-width: none;
+  margin-top: 0;
+  padding-top: 20px;
+  border-top: 1px solid var(--line);
+  font-size: 0.9rem;
 }
 
 .cart-panel {
@@ -837,6 +938,127 @@ textarea {
   display: block;
 }
 
+.modal {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: none;
+  place-items: center;
+  padding: 18px;
+  background: rgba(28, 31, 33, 0.48);
+}
+
+.modal.open {
+  display: grid;
+}
+
+.modal-card {
+  position: relative;
+  width: min(940px, 100%);
+  max-height: min(760px, calc(100vh - 36px));
+  display: grid;
+  grid-template-columns: 0.9fr 1.1fr;
+  overflow: auto;
+  border-radius: 8px;
+  background: var(--white);
+  box-shadow: var(--shadow);
+}
+
+.checkout-card {
+  width: min(560px, 100%);
+  grid-template-columns: 1fr;
+}
+
+.modal-close {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+  background: var(--white);
+}
+
+.modal-art {
+  min-height: 460px;
+  display: grid;
+  place-items: center;
+  background: var(--product-bg);
+}
+
+.modal-art::before {
+  content: "";
+  width: 55%;
+  aspect-ratio: 1;
+  border-radius: var(--shape-radius);
+  background: var(--shape-bg);
+  box-shadow: 0 24px 52px rgba(28, 31, 33, 0.2);
+}
+
+.modal-copy {
+  display: grid;
+  align-content: center;
+  gap: 18px;
+  padding: clamp(28px, 5vw, 54px);
+}
+
+.modal-copy h2 {
+  margin: 0;
+  font-size: clamp(2rem, 4vw, 3.8rem);
+  line-height: 0.98;
+}
+
+.modal-copy p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.65;
+}
+
+.detail-list {
+  display: grid;
+  gap: 1px;
+  margin: 0;
+  overflow: hidden;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--line);
+}
+
+.detail-list div {
+  display: grid;
+  grid-template-columns: 140px 1fr;
+  gap: 16px;
+  padding: 14px;
+  background: #fff;
+}
+
+.detail-list dt,
+.detail-list dd {
+  margin: 0;
+}
+
+.detail-list dt {
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.detail-list dd {
+  font-weight: 800;
+}
+
+.modal-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.modal-actions strong {
+  color: var(--coral);
+  font-size: 1.35rem;
+}
+
 .toast {
   position: fixed;
   left: 50%;
@@ -887,6 +1109,18 @@ textarea {
     grid-template-columns: 1fr;
   }
 
+  .modal-card {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-art {
+    min-height: 280px;
+  }
+
+  .newsletter-form div {
+    grid-template-columns: 1fr;
+  }
+
   .section-heading {
     align-items: start;
     flex-direction: column;
@@ -916,5 +1150,14 @@ textarea {
 
   .product-actions {
     grid-template-columns: 1fr;
+  }
+
+  .detail-list div {
+    grid-template-columns: 1fr;
+  }
+
+  .modal-actions {
+    align-items: stretch;
+    flex-direction: column;
   }
 }

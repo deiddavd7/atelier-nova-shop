@@ -5,6 +5,9 @@ const products = [
     category: "print",
     price: 42,
     description: "Carta naturale 250g, firmata e pronta per cornice.",
+    materials: "Carta naturale 250g, stampa pigmentata",
+    size: "29,7 × 42 cm",
+    stock: "12 copie numerate",
     bg: "#f3d6ca",
     shape: "linear-gradient(135deg, #ffffff, #e8c7b8)",
     radius: "6px"
@@ -14,7 +17,10 @@ const products = [
     name: "Tazza ceramica salvia",
     category: "home",
     price: 34,
-    description: "Ceramica smaltata a mano, ideale per caffe e tisane.",
+    description: "Ceramica smaltata a mano, ideale per caffè e tisane.",
+    materials: "Gres smaltato, finitura satinata",
+    size: "300 ml",
+    stock: "8 pezzi disponibili",
     bg: "#dce8dc",
     shape: "linear-gradient(135deg, #b5cdb9, #6d8c72)",
     radius: "50%"
@@ -25,6 +31,9 @@ const products = [
     category: "paper",
     price: 26,
     description: "Copertina in tela, 120 pagine puntinate color avorio.",
+    materials: "Tela grezza, carta FSC color avorio",
+    size: "A5, 120 pagine",
+    stock: "18 pezzi disponibili",
     bg: "#efe5d1",
     shape: "linear-gradient(135deg, #fff7e6, #b88a44)",
     radius: "8px"
@@ -35,6 +44,9 @@ const products = [
     category: "home",
     price: 29,
     description: "Cera vegetale con note di cedro, ambra e lino pulito.",
+    materials: "Cera vegetale, stoppino cotone, vetro ambrato",
+    size: "180 g",
+    stock: "15 pezzi disponibili",
     bg: "#e8edf0",
     shape: "linear-gradient(135deg, #f9fbfb, #8b969a)",
     radius: "22px"
@@ -45,6 +57,9 @@ const products = [
     category: "paper",
     price: 18,
     description: "Sei soggetti botanici stampati su carta martellata.",
+    materials: "Carta martellata 300g",
+    size: "Set da 6, formato A6",
+    stock: "24 set disponibili",
     bg: "#d9e4cd",
     shape: "linear-gradient(135deg, #ffffff, #9fb86f)",
     radius: "4px"
@@ -55,6 +70,9 @@ const products = [
     category: "home",
     price: 38,
     description: "Canvas pesante, manici rinforzati e stampa serigrafica.",
+    materials: "Canvas cotone, stampa serigrafica",
+    size: "38 × 42 cm",
+    stock: "10 pezzi disponibili",
     bg: "#e9ddd2",
     shape: "linear-gradient(135deg, #fffdf8, #c9715a)",
     radius: "18px"
@@ -71,7 +89,21 @@ const cartNote = document.querySelector("#cartNote");
 const checkoutButton = document.querySelector("#checkoutButton");
 const scrim = document.querySelector("#scrim");
 const toast = document.querySelector("#toast");
+const productModal = document.querySelector("#productModal");
+const checkoutModal = document.querySelector("#checkoutModal");
+const modalArt = document.querySelector("#modalArt");
+const modalCategory = document.querySelector("#modalCategory");
+const modalTitle = document.querySelector("#modalTitle");
+const modalDescription = document.querySelector("#modalDescription");
+const modalMaterials = document.querySelector("#modalMaterials");
+const modalSize = document.querySelector("#modalSize");
+const modalStock = document.querySelector("#modalStock");
+const modalPrice = document.querySelector("#modalPrice");
+const modalAddButton = document.querySelector("#modalAddButton");
+const checkoutSummary = document.querySelector("#checkoutSummary");
+const checkoutForm = document.querySelector(".checkout-card");
 let toastTimer;
+let activeProductId = null;
 
 function formatPrice(value) {
   return new Intl.NumberFormat("it-IT", {
@@ -143,6 +175,10 @@ function renderCart() {
   `).join("");
 }
 
+function getCartTotal() {
+  return cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+}
+
 function showToast(message) {
   toast.textContent = message;
   toast.classList.add("visible");
@@ -159,6 +195,35 @@ function addToCart(product) {
   } else {
     cart.push({ ...product, quantity: 1 });
   }
+}
+
+function openModal(modal) {
+  modal.classList.add("open");
+  modal.setAttribute("aria-hidden", "false");
+  document.body.classList.add("modal-open");
+}
+
+function closeModals() {
+  document.querySelectorAll(".modal.open").forEach((modal) => {
+    modal.classList.remove("open");
+    modal.setAttribute("aria-hidden", "true");
+  });
+  document.body.classList.remove("modal-open");
+}
+
+function openProductModal(product) {
+  activeProductId = product.id;
+  modalArt.style.setProperty("--product-bg", product.bg);
+  modalArt.style.setProperty("--shape-bg", product.shape);
+  modalArt.style.setProperty("--shape-radius", product.radius);
+  modalCategory.textContent = product.category;
+  modalTitle.textContent = product.name;
+  modalDescription.textContent = product.description;
+  modalMaterials.textContent = product.materials;
+  modalSize.textContent = product.size;
+  modalStock.textContent = product.stock;
+  modalPrice.textContent = formatPrice(product.price);
+  openModal(productModal);
 }
 
 function openCart() {
@@ -194,12 +259,23 @@ productGrid.addEventListener("click", (event) => {
 
   const product = products.find((item) => item.id === Number(button.dataset.id));
   if (detailButton) {
-    showToast(`${product.name}: ${product.description}`);
+    openProductModal(product);
     return;
   }
 
   addToCart(product);
   renderCart();
+  showToast(`${product.name} aggiunto al carrello.`);
+  openCart();
+});
+
+modalAddButton.addEventListener("click", () => {
+  const product = products.find((item) => item.id === activeProductId);
+  if (!product) return;
+
+  addToCart(product);
+  renderCart();
+  closeModals();
   showToast(`${product.name} aggiunto al carrello.`);
   openCart();
 });
@@ -232,21 +308,51 @@ cartItems.addEventListener("click", (event) => {
 checkoutButton.addEventListener("click", () => {
   if (!cart.length) return;
 
-  const total = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
-  cartItems.innerHTML = `
-    <div class="checkout-summary">
-      <h3>Checkout demo pronto</h3>
-      <p>Totale ordine: <strong>${formatPrice(total)}</strong></p>
-      <p>Qui puoi collegare Stripe, Shopify Buy Button, WooCommerce o un backend personalizzato.</p>
-    </div>
-  `;
-  showToast("Checkout demo generato.");
+  const itemCount = cart.reduce((sum, item) => sum + item.quantity, 0);
+  const itemLabel = itemCount === 1 ? "articolo" : "articoli";
+  checkoutSummary.textContent = `${itemCount} ${itemLabel} · totale ${formatPrice(getCartTotal())}. Questo form è pronto per essere collegato a un pagamento reale.`;
+  closeCart();
+  openModal(checkoutModal);
 });
 
 document.querySelector(".contact-form").addEventListener("submit", (event) => {
   event.preventDefault();
   event.currentTarget.reset();
   showToast("Grazie, richiesta ricevuta.");
+});
+
+document.querySelector(".newsletter-form").addEventListener("submit", (event) => {
+  event.preventDefault();
+  event.currentTarget.reset();
+  showToast("Iscrizione demo registrata.");
+});
+
+checkoutForm.addEventListener("submit", (event) => {
+  event.preventDefault();
+  event.currentTarget.reset();
+  cart.splice(0, cart.length);
+  renderCart();
+  closeModals();
+  showToast("Ordine demo confermato.");
+});
+
+document.querySelectorAll("[data-close-modal]").forEach((button) => {
+  button.addEventListener("click", closeModals);
+});
+
+document.querySelectorAll(".modal").forEach((modal) => {
+  modal.addEventListener("click", (event) => {
+    if (event.target === modal) {
+      closeModals();
+    }
+  });
+});
+
+document.addEventListener("keydown", (event) => {
+  if (event.key === "Escape") {
+    closeCart();
+    closeModals();
+  }
 });
 
 renderProducts();

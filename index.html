@@ -3,15 +3,25 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Atelier Nova è un portfolio shop indipendente per oggetti, stampe, identità visive e micro-collezioni curate.">
+  <meta name="theme-color" content="#1c1f21">
+  <meta property="og:title" content="Atelier Nova | Portfolio Shop">
+  <meta property="og:description" content="Portfolio shop indipendente per oggetti, stampe e micro-collezioni curate.">
+  <meta property="og:type" content="website">
+  <meta property="og:image" content="assets/hero-shop.png">
+  <meta property="og:url" content="https://deiddavd7.github.io/atelier-nova-shop/">
+  <meta name="twitter:card" content="summary_large_image">
   <title>Atelier Nova | Portfolio Shop</title>
+  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <a class="skip-link" href="#main">Vai al contenuto</a>
   <header class="site-header">
-    <a class="brand" href="#top" aria-label="Atelier Nova home">
+    <a class="brand" href="#main" aria-label="Atelier Nova home">
       <span class="brand-mark">AN</span>
       <span>Atelier Nova</span>
     </a>
@@ -19,6 +29,7 @@
       <a href="#portfolio">Portfolio</a>
       <a href="#process">Processo</a>
       <a href="#shop">Shop</a>
+      <a href="#services">Servizi</a>
       <a href="#about">Studio</a>
       <a href="#contact">Contatti</a>
     </nav>
@@ -28,7 +39,7 @@
     </button>
   </header>
 
-  <main id="top">
+  <main id="main">
     <section class="hero">
       <img class="hero-image" src="assets/hero-shop.png" alt="Oggetti di design artigianale per portfolio e shop online">
       <div class="hero-overlay"></div>
@@ -151,7 +162,7 @@
       <p>Atelier Nova combina direzione creativa, artigianato e vendita online. Ogni prodotto nasce da un progetto visivo: prima l'idea, poi il prototipo, infine una tiratura sostenibile e numerata.</p>
     </section>
 
-    <section class="section services-section" aria-label="Servizi e pacchetti">
+    <section class="section services-section" id="services" aria-label="Servizi e pacchetti">
       <div class="section-heading">
         <div>
           <p class="eyebrow">Servizi</p>
@@ -189,6 +200,29 @@
       </div>
     </section>
 
+    <section class="section faq-section" id="faq">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">FAQ</p>
+          <h2>Domande rapide</h2>
+        </div>
+      </div>
+      <div class="faq-list">
+        <details>
+          <summary>Posso trasformare questo shop in un ecommerce reale?</summary>
+          <p>Sì. La struttura è pronta per essere collegata a Stripe, Shopify Buy Button, WooCommerce o a un backend personalizzato.</p>
+        </details>
+        <details>
+          <summary>Il portfolio può diventare personale?</summary>
+          <p>Sì. Testi, prodotti, metriche e immagini sono modulari: basta sostituire i contenuti con i tuoi lavori reali.</p>
+        </details>
+        <details>
+          <summary>Funziona anche da mobile?</summary>
+          <p>Sì. Layout, card, carrello e modali sono responsive e pensati per una navigazione comoda anche su schermi piccoli.</p>
+        </details>
+      </div>
+    </section>
+
     <section class="section contact-section" id="contact">
       <div class="section-heading">
         <p class="eyebrow">Contatti</p>
@@ -197,11 +231,11 @@
       <form class="contact-form">
         <label>
           Nome
-          <input type="text" name="name" placeholder="Il tuo nome">
+          <input type="text" name="name" placeholder="Il tuo nome" required>
         </label>
         <label>
           Email
-          <input type="email" name="email" placeholder="nome@email.com">
+          <input type="email" name="email" placeholder="nome@email.com" required>
         </label>
         <label>
           Messaggio
@@ -214,17 +248,26 @@
 
   <footer class="site-footer">
     <div>
-      <a class="brand" href="#top" aria-label="Atelier Nova home">
+      <a class="brand" href="#main" aria-label="Atelier Nova home">
         <span class="brand-mark">AN</span>
         <span>Atelier Nova</span>
       </a>
       <p>Portfolio shop indipendente per oggetti, identità visive e micro-collezioni.</p>
     </div>
+    <form class="newsletter-form" aria-label="Newsletter">
+      <label for="newsletterEmail">Newsletter</label>
+      <div>
+        <input id="newsletterEmail" type="email" name="newsletter" placeholder="email@dominio.com" required>
+        <button class="button primary" type="submit">Iscriviti</button>
+      </div>
+    </form>
     <div class="footer-links">
       <a href="#portfolio">Portfolio</a>
       <a href="#shop">Shop</a>
+      <a href="#faq">FAQ</a>
       <a href="#contact">Contatti</a>
     </div>
+    <p class="legal-line">© 2026 Atelier Nova. Portfolio demo pronto per personalizzazione e checkout reale.</p>
   </footer>
 
   <aside class="cart-panel" id="cartPanel" aria-label="Carrello" aria-hidden="true">
@@ -242,9 +285,57 @@
       <button class="button primary checkout" id="checkoutButton" type="button">Checkout demo</button>
     </div>
   </aside>
+  <section class="modal" id="productModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-card">
+      <button class="icon-button modal-close" type="button" data-close-modal aria-label="Chiudi dettagli">×</button>
+      <div class="modal-art" id="modalArt"></div>
+      <div class="modal-copy">
+        <p class="eyebrow" id="modalCategory">Prodotto</p>
+        <h2 id="modalTitle">Titolo prodotto</h2>
+        <p id="modalDescription"></p>
+        <dl class="detail-list">
+          <div><dt>Materiali</dt><dd id="modalMaterials"></dd></div>
+          <div><dt>Formato</dt><dd id="modalSize"></dd></div>
+          <div><dt>Disponibilità</dt><dd id="modalStock"></dd></div>
+        </dl>
+        <div class="modal-actions">
+          <strong id="modalPrice"></strong>
+          <button class="button primary" id="modalAddButton" type="button">Aggiungi al carrello</button>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="modal" id="checkoutModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="checkoutTitle">
+    <form class="modal-card checkout-card">
+      <button class="icon-button modal-close" type="button" data-close-modal aria-label="Chiudi checkout">×</button>
+      <div class="modal-copy">
+        <p class="eyebrow">Checkout demo</p>
+        <h2 id="checkoutTitle">Ordine pronto</h2>
+        <p id="checkoutSummary">Riepilogo ordine</p>
+        <label>
+          Email
+          <input type="email" name="checkoutEmail" placeholder="email@dominio.com" required>
+        </label>
+        <label>
+          Note ordine
+          <textarea name="checkoutNotes" rows="3" placeholder="Preferenze, regalo, indirizzo o richiesta speciale"></textarea>
+        </label>
+        <button class="button primary" type="submit">Conferma demo</button>
+      </div>
+    </form>
+  </section>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
   <div class="scrim" id="scrim"></div>
 
+  <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "Atelier Nova",
+      "url": "https://deiddavd7.github.io/atelier-nova-shop/",
+      "description": "Portfolio shop indipendente per oggetti, stampe e micro-collezioni curate."
+    }
+  </script>
   <script src="script.js"></script>
 </body>
 </html>
