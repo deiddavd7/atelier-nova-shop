@@ -1,0 +1,16 @@
+{
+  "name": "Atelier Nova Portfolio Shop",
+  "short_name": "Atelier Nova",
+  "description": "Portfolio shop indipendente per oggetti, stampe e micro-collezioni curate.",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#faf7f0",
+  "theme_color": "#1c1f21",
+  "icons": [
+    {
+      "src": "assets/favicon.svg",
+      "sizes": "64x64",
+      "type": "image/svg+xml"
+    }
+  ]
+}

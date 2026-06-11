@@ -30,6 +30,9 @@ Apri `index.html` nel browser.
 - Checkout demo con form e conferma ordine
 - Newsletter demo e FAQ
 - Skip link, focus visibile e miglioramenti accessibilità
+- Ricerca, ordinamento e preferiti nello shop
+- Animazioni progressive, nav attiva e pulsante torna-su
+- Manifest PWA base e workflow GitHub Pages
 
 ## Prossimi step consigliati
 

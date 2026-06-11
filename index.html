@@ -13,6 +13,7 @@
   <meta name="twitter:card" content="summary_large_image">
   <title>Atelier Nova | Portfolio Shop</title>
   <link rel="icon" href="assets/favicon.svg" type="image/svg+xml">
+  <link rel="manifest" href="site.webmanifest">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@700&display=swap" rel="stylesheet">
@@ -144,13 +145,30 @@
           <p class="eyebrow">Shop</p>
           <h2>Collezione pronta</h2>
         </div>
-        <div class="filters" role="group" aria-label="Filtra prodotti">
-          <button class="filter active" type="button" data-filter="all">Tutto</button>
-          <button class="filter" type="button" data-filter="print">Stampe</button>
-          <button class="filter" type="button" data-filter="home">Casa</button>
-          <button class="filter" type="button" data-filter="paper">Carta</button>
+        <div class="shop-tools">
+          <label class="search-field">
+            <span>Cerca</span>
+            <input id="productSearch" type="search" placeholder="Stampa, tazza, notebook...">
+          </label>
+          <label class="sort-field">
+            <span>Ordina</span>
+            <select id="productSort">
+              <option value="featured">In evidenza</option>
+              <option value="price-asc">Prezzo crescente</option>
+              <option value="price-desc">Prezzo decrescente</option>
+              <option value="name">Nome A-Z</option>
+            </select>
+          </label>
+          <div class="filters" role="group" aria-label="Filtra prodotti">
+            <button class="filter active" type="button" data-filter="all">Tutto</button>
+            <button class="filter" type="button" data-filter="print">Stampe</button>
+            <button class="filter" type="button" data-filter="home">Casa</button>
+            <button class="filter" type="button" data-filter="paper">Carta</button>
+            <button class="filter" type="button" data-filter="favorites">Preferiti <span id="favoriteCount">0</span></button>
+          </div>
         </div>
       </div>
+      <p class="results-count" id="resultsCount">6 prodotti disponibili</p>
       <div class="product-grid" id="productGrid"></div>
     </section>
 
@@ -325,6 +343,7 @@
     </form>
   </section>
   <div class="toast" id="toast" role="status" aria-live="polite"></div>
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Torna in alto">↑</button>
   <div class="scrim" id="scrim"></div>
 
   <script type="application/ld+json">

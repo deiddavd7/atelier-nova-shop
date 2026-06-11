@@ -80,7 +80,15 @@ const products = [
 ];
 
 const cart = [];
+const favorites = new Set(JSON.parse(localStorage.getItem("atelierNovaFavorites") || "[]"));
+let activeFilter = "all";
+let searchTerm = "";
+let sortMode = "featured";
 const productGrid = document.querySelector("#productGrid");
+const productSearch = document.querySelector("#productSearch");
+const productSort = document.querySelector("#productSort");
+const resultsCount = document.querySelector("#resultsCount");
+const favoriteCount = document.querySelector("#favoriteCount");
 const cartPanel = document.querySelector("#cartPanel");
 const cartItems = document.querySelector("#cartItems");
 const cartTotal = document.querySelector("#cartTotal");
@@ -102,6 +110,7 @@ const modalPrice = document.querySelector("#modalPrice");
 const modalAddButton = document.querySelector("#modalAddButton");
 const checkoutSummary = document.querySelector("#checkoutSummary");
 const checkoutForm = document.querySelector(".checkout-card");
+const backToTop = document.querySelector("#backToTop");
 let toastTimer;
 let activeProductId = null;
 
@@ -113,14 +122,54 @@ function formatPrice(value) {
   }).format(value);
 }
 
-function renderProducts(category = "all") {
-  const visibleProducts = category === "all"
-    ? products
-    : products.filter((product) => product.category === category);
+function getVisibleProducts() {
+  const normalizedSearch = searchTerm.trim().toLowerCase();
+  const filteredProducts = products.filter((product) => {
+    const matchesCategory = activeFilter === "all"
+      || product.category === activeFilter
+      || (activeFilter === "favorites" && favorites.has(product.id));
+    const matchesSearch = !normalizedSearch
+      || product.name.toLowerCase().includes(normalizedSearch)
+      || product.description.toLowerCase().includes(normalizedSearch)
+      || product.materials.toLowerCase().includes(normalizedSearch);
+
+    return matchesCategory && matchesSearch;
+  });
+
+  return [...filteredProducts].sort((a, b) => {
+    if (sortMode === "price-asc") return a.price - b.price;
+    if (sortMode === "price-desc") return b.price - a.price;
+    if (sortMode === "name") return a.name.localeCompare(b.name, "it");
+    return a.id - b.id;
+  });
+}
+
+function saveFavorites() {
+  localStorage.setItem("atelierNovaFavorites", JSON.stringify([...favorites]));
+}
+
+function renderProducts() {
+  const visibleProducts = getVisibleProducts();
+  const label = visibleProducts.length === 1 ? "prodotto disponibile" : "prodotti disponibili";
+  favoriteCount.textContent = favorites.size;
+  resultsCount.textContent = visibleProducts.length
+    ? `${visibleProducts.length} ${label}`
+    : "Nessun prodotto trovato";
+
+  if (!visibleProducts.length) {
+    productGrid.innerHTML = `
+      <div class="empty-state">
+        <h3>Nessun prodotto trovato</h3>
+        <p>Prova a cambiare ricerca, filtro o ordinamento.</p>
+      </div>
+    `;
+    return;
+  }
 
   productGrid.innerHTML = visibleProducts.map((product) => `
-    <article class="product-card">
+    <article class="product-card reveal">
       <div class="product-art" style="--product-bg: ${product.bg}">
+        <button class="favorite-button ${favorites.has(product.id) ? "active" : ""}" type="button" data-id="${product.id}" aria-label="${favorites.has(product.id) ? "Rimuovi dai preferiti" : "Aggiungi ai preferiti"}">♥</button>
         <div class="product-shape" style="--shape-bg: ${product.shape}; --shape-radius: ${product.radius}"></div>
       </div>
       <div class="product-info">
@@ -137,6 +186,7 @@ function renderProducts(category = "all") {
       </div>
     </article>
   `).join("");
+  observeRevealItems();
 }
 
 function renderCart() {
@@ -248,16 +298,31 @@ document.querySelector(".filters").addEventListener("click", (event) => {
 
   document.querySelectorAll(".filter").forEach((filter) => filter.classList.remove("active"));
   button.classList.add("active");
-  renderProducts(button.dataset.filter);
+  activeFilter = button.dataset.filter;
+  renderProducts();
 });
 
 productGrid.addEventListener("click", (event) => {
+  const favoriteButton = event.target.closest(".favorite-button");
   const detailButton = event.target.closest(".details-button");
   const addButton = event.target.closest(".add-button");
-  const button = detailButton || addButton;
+  const button = favoriteButton || detailButton || addButton;
   if (!button) return;
 
   const product = products.find((item) => item.id === Number(button.dataset.id));
+  if (favoriteButton) {
+    if (favorites.has(product.id)) {
+      favorites.delete(product.id);
+      showToast(`${product.name} rimosso dai preferiti.`);
+    } else {
+      favorites.add(product.id);
+      showToast(`${product.name} salvato nei preferiti.`);
+    }
+    saveFavorites();
+    renderProducts();
+    return;
+  }
+
   if (detailButton) {
     openProductModal(product);
     return;
@@ -305,6 +370,16 @@ cartItems.addEventListener("click", (event) => {
   renderCart();
 });
 
+productSearch.addEventListener("input", (event) => {
+  searchTerm = event.target.value;
+  renderProducts();
+});
+
+productSort.addEventListener("change", (event) => {
+  sortMode = event.target.value;
+  renderProducts();
+});
+
 checkoutButton.addEventListener("click", () => {
   if (!cart.length) return;
 
@@ -325,6 +400,10 @@ document.querySelector(".newsletter-form").addEventListener("submit", (event) =>
   event.preventDefault();
   event.currentTarget.reset();
   showToast("Iscrizione demo registrata.");
+});
+
+backToTop.addEventListener("click", () => {
+  window.scrollTo({ top: 0, behavior: "smooth" });
 });
 
 checkoutForm.addEventListener("submit", (event) => {
@@ -355,5 +434,55 @@ document.addEventListener("keydown", (event) => {
   }
 });
 
+const revealObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add("is-visible");
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.16 })
+  : null;
+
+function observeRevealItems() {
+  document.querySelectorAll(".reveal:not(.is-visible)").forEach((item) => {
+    if (revealObserver) {
+      revealObserver.observe(item);
+    } else {
+      item.classList.add("is-visible");
+    }
+  });
+}
+
+document.querySelectorAll(".section, .stats div, .work-card, .service-card, .testimonial-band, .faq-list details").forEach((item) => {
+  item.classList.add("reveal");
+});
+
+const navLinks = [...document.querySelectorAll(".main-nav a")];
+const sectionsByNav = navLinks
+  .map((link) => document.querySelector(link.getAttribute("href")))
+  .filter(Boolean);
+
+const navObserver = "IntersectionObserver" in window
+  ? new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!entry.isIntersecting) return;
+      navLinks.forEach((link) => {
+        link.classList.toggle("active", link.getAttribute("href") === `#${entry.target.id}`);
+      });
+    });
+  }, { rootMargin: "-35% 0px -55% 0px" })
+  : null;
+
+if (navObserver) {
+  sectionsByNav.forEach((section) => navObserver.observe(section));
+}
+
+window.addEventListener("scroll", () => {
+  backToTop.classList.toggle("visible", window.scrollY > 760);
+}, { passive: true });
+
 renderProducts();
 renderCart();
+observeRevealItems();

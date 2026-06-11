@@ -113,6 +113,29 @@ textarea {
   font-weight: 600;
 }
 
+.main-nav a {
+  position: relative;
+  padding-block: 6px;
+}
+
+.main-nav a::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: var(--coral);
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 160ms ease;
+}
+
+.main-nav a.active::after,
+.main-nav a:hover::after {
+  transform: scaleX(1);
+}
+
 .cart-toggle {
   justify-self: end;
   display: inline-flex;
@@ -365,6 +388,25 @@ textarea {
   margin: 0 auto;
 }
 
+.empty-state {
+  grid-column: 1 / -1;
+  padding: 42px;
+  border: 1px dashed var(--line);
+  border-radius: 8px;
+  text-align: center;
+  background: var(--paper);
+}
+
+.empty-state h3,
+.empty-state p {
+  margin: 0;
+}
+
+.empty-state p {
+  margin-top: 8px;
+  color: var(--muted);
+}
+
 .work-card,
 .product-card {
   border: 1px solid var(--line);
@@ -445,6 +487,42 @@ textarea {
   background: var(--white);
 }
 
+.shop-tools {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) minmax(180px, 0.45fr);
+  gap: 12px;
+  width: min(620px, 100%);
+}
+
+.search-field,
+.sort-field {
+  display: grid;
+  gap: 7px;
+  color: var(--muted);
+  font-size: 0.78rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.search-field input,
+.sort-field select {
+  width: 100%;
+  min-height: 46px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  padding: 0 16px;
+  color: var(--ink);
+  background: #fff;
+  font-weight: 700;
+  letter-spacing: 0;
+  text-transform: none;
+}
+
+.shop-tools .filters {
+  grid-column: 1 / -1;
+}
+
 .filter {
   color: var(--ink);
   background: transparent;
@@ -456,17 +534,66 @@ textarea {
   background: var(--ink);
 }
 
+.filter span {
+  display: inline-grid;
+  min-width: 22px;
+  min-height: 22px;
+  margin-left: 6px;
+  place-items: center;
+  border-radius: 999px;
+  color: var(--ink);
+  background: var(--white);
+  font-size: 0.78rem;
+}
+
+.results-count {
+  max-width: var(--max);
+  margin: -12px auto 22px;
+  color: var(--muted);
+  font-weight: 800;
+}
+
 .product-card {
+  position: relative;
   display: flex;
   flex-direction: column;
   background: #fff;
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.product-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 18px 54px rgba(28, 31, 33, 0.12);
 }
 
 .product-art {
+  position: relative;
   min-height: 250px;
   display: grid;
   place-items: center;
   background: var(--product-bg);
+}
+
+.favorite-button {
+  position: absolute;
+  top: 14px;
+  right: 14px;
+  z-index: 1;
+  width: 42px;
+  height: 42px;
+  border: 1px solid rgba(28, 31, 33, 0.14);
+  border-radius: 50%;
+  color: var(--ink);
+  background: rgba(255, 253, 248, 0.82);
+  cursor: pointer;
+  font-size: 1.2rem;
+  font-weight: 900;
+  backdrop-filter: blur(10px);
+}
+
+.favorite-button.active {
+  color: var(--white);
+  background: var(--coral);
 }
 
 .product-shape {
@@ -1059,6 +1186,17 @@ textarea {
   font-size: 1.35rem;
 }
 
+.reveal {
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 480ms ease, transform 480ms ease;
+}
+
+.reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
 .toast {
   position: fixed;
   left: 50%;
@@ -1079,6 +1217,31 @@ textarea {
 .toast.visible {
   opacity: 1;
   transform: translate(-50%, 0);
+}
+
+.back-to-top {
+  position: fixed;
+  right: 22px;
+  bottom: 22px;
+  z-index: 35;
+  width: 46px;
+  height: 46px;
+  border: 1px solid rgba(255, 253, 248, 0.3);
+  border-radius: 50%;
+  color: var(--white);
+  background: var(--ink);
+  box-shadow: var(--shadow);
+  cursor: pointer;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(10px);
+  transition: opacity 160ms ease, transform 160ms ease;
+}
+
+.back-to-top.visible {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 @media (max-width: 860px) {
@@ -1126,6 +1289,10 @@ textarea {
     flex-direction: column;
   }
 
+  .shop-tools {
+    grid-template-columns: 1fr;
+  }
+
   .feature-media {
     min-height: 380px;
   }
@@ -1159,5 +1326,21 @@ textarea {
   .modal-actions {
     align-items: stretch;
     flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+  }
+
+  .reveal {
+    opacity: 1;
+    transform: none;
   }
 }
