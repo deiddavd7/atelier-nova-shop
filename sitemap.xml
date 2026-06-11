@@ -4,4 +4,16 @@
     <loc>https://deiddavd7.github.io/atelier-nova-shop/</loc>
     <priority>1.0</priority>
   </url>
+  <url>
+    <loc>https://deiddavd7.github.io/atelier-nova-shop/privacy.html</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://deiddavd7.github.io/atelier-nova-shop/terms.html</loc>
+    <priority>0.4</priority>
+  </url>
+  <url>
+    <loc>https://deiddavd7.github.io/atelier-nova-shop/shipping-returns.html</loc>
+    <priority>0.4</priority>
+  </url>
 </urlset>

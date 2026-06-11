@@ -79,7 +79,13 @@ const products = [
   }
 ];
 
-const cart = [];
+const savedCart = JSON.parse(localStorage.getItem("atelierNovaCart") || "[]");
+const cart = savedCart
+  .map((savedItem) => {
+    const product = products.find((item) => item.id === savedItem.id);
+    return product ? { ...product, quantity: savedItem.quantity } : null;
+  })
+  .filter(Boolean);
 const favorites = new Set(JSON.parse(localStorage.getItem("atelierNovaFavorites") || "[]"));
 let activeFilter = "all";
 let searchTerm = "";
@@ -95,6 +101,7 @@ const cartTotal = document.querySelector("#cartTotal");
 const cartCount = document.querySelector("#cartCount");
 const cartNote = document.querySelector("#cartNote");
 const checkoutButton = document.querySelector("#checkoutButton");
+const clearCartButton = document.querySelector("#clearCartButton");
 const scrim = document.querySelector("#scrim");
 const toast = document.querySelector("#toast");
 const productModal = document.querySelector("#productModal");
@@ -113,6 +120,7 @@ const checkoutForm = document.querySelector(".checkout-card");
 const backToTop = document.querySelector("#backToTop");
 let toastTimer;
 let activeProductId = null;
+let lastFocusedElement = null;
 
 function formatPrice(value) {
   return new Intl.NumberFormat("it-IT", {
@@ -146,6 +154,13 @@ function getVisibleProducts() {
 
 function saveFavorites() {
   localStorage.setItem("atelierNovaFavorites", JSON.stringify([...favorites]));
+}
+
+function saveCart() {
+  localStorage.setItem("atelierNovaCart", JSON.stringify(cart.map((item) => ({
+    id: item.id,
+    quantity: item.quantity
+  }))));
 }
 
 function renderProducts() {
@@ -198,6 +213,7 @@ function renderCart() {
     ? "Spedizione gratuita applicata al checkout demo."
     : `Aggiungi ${formatPrice(80 - total)} per la spedizione gratuita.`;
   checkoutButton.disabled = cart.length === 0;
+  clearCartButton.disabled = cart.length === 0;
 
   if (!cart.length) {
     cartItems.innerHTML = "<p>Il carrello è vuoto.</p>";
@@ -245,12 +261,16 @@ function addToCart(product) {
   } else {
     cart.push({ ...product, quantity: 1 });
   }
+  saveCart();
 }
 
 function openModal(modal) {
+  lastFocusedElement = document.activeElement;
   modal.classList.add("open");
   modal.setAttribute("aria-hidden", "false");
   document.body.classList.add("modal-open");
+  const focusTarget = modal.querySelector("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])");
+  focusTarget?.focus();
 }
 
 function closeModals() {
@@ -259,6 +279,7 @@ function closeModals() {
     modal.setAttribute("aria-hidden", "true");
   });
   document.body.classList.remove("modal-open");
+  lastFocusedElement?.focus?.();
 }
 
 function openProductModal(product) {
@@ -367,7 +388,17 @@ cartItems.addEventListener("click", (event) => {
     cart.splice(index, 1);
   }
 
+  saveCart();
   renderCart();
+});
+
+clearCartButton.addEventListener("click", () => {
+  if (!cart.length) return;
+
+  cart.splice(0, cart.length);
+  saveCart();
+  renderCart();
+  showToast("Carrello svuotato.");
 });
 
 productSearch.addEventListener("input", (event) => {
@@ -410,6 +441,7 @@ checkoutForm.addEventListener("submit", (event) => {
   event.preventDefault();
   event.currentTarget.reset();
   cart.splice(0, cart.length);
+  saveCart();
   renderCart();
   closeModals();
   showToast("Ordine demo confermato.");
@@ -428,6 +460,22 @@ document.querySelectorAll(".modal").forEach((modal) => {
 });
 
 document.addEventListener("keydown", (event) => {
+  const openModalElement = document.querySelector(".modal.open");
+  if (event.key === "Tab" && openModalElement) {
+    const focusable = [...openModalElement.querySelectorAll("button, [href], input, select, textarea, [tabindex]:not([tabindex='-1'])")]
+      .filter((element) => !element.disabled && element.offsetParent !== null);
+    const first = focusable[0];
+    const last = focusable[focusable.length - 1];
+
+    if (event.shiftKey && document.activeElement === first) {
+      event.preventDefault();
+      last.focus();
+    } else if (!event.shiftKey && document.activeElement === last) {
+      event.preventDefault();
+      first.focus();
+    }
+  }
+
   if (event.key === "Escape") {
     closeCart();
     closeModals();

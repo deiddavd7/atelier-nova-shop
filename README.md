@@ -47,6 +47,9 @@ Poi apri `http://localhost:4173`.
 - Garanzie operative, policy, pagina 404 e sitemap
 - Dati strutturati JSON-LD per sito, organizzazione e prodotti
 - Form contatti con tipo progetto e timeline
+- Pagine dedicate privacy, termini, spedizioni e resi
+- Carrello persistente nel browser e azione di svuotamento
+- Focus trap nei modali per migliore accessibilità da tastiera
 
 ## Prossimi step consigliati
 
