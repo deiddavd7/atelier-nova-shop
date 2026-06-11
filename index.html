@@ -172,6 +172,25 @@
       <div class="product-grid" id="productGrid"></div>
     </section>
 
+    <section class="assurance-band" aria-label="Garanzie di acquisto">
+      <div>
+        <strong>Pagamenti pronti</strong>
+        <span>Struttura compatibile con Stripe, Shopify e WooCommerce.</span>
+      </div>
+      <div>
+        <strong>Spedizione curata</strong>
+        <span>Packaging protettivo, nota regalo e tracking ordine.</span>
+      </div>
+      <div>
+        <strong>Resi semplici</strong>
+        <span>Policy chiara, assistenza via email e cambio prodotto.</span>
+      </div>
+      <div>
+        <strong>Accessibile</strong>
+        <span>Focus visibile, modali responsive e preferenze movimento.</span>
+      </div>
+    </section>
+
     <section class="studio-band" id="about">
       <div>
         <p class="eyebrow">Studio</p>
@@ -218,6 +237,34 @@
       </div>
     </section>
 
+    <section class="section policies-section" id="policies">
+      <div class="section-heading">
+        <div>
+          <p class="eyebrow">Policy</p>
+          <h2>Chiarezza prima dell'acquisto.</h2>
+        </div>
+        <p class="section-intro">Una struttura professionale deve spiegare bene cosa succede dopo il click: tempi, resi, privacy e assistenza.</p>
+      </div>
+      <div class="policy-grid">
+        <article>
+          <h3>Spedizioni</h3>
+          <p>Preparazione in 48 ore lavorative, tracking via email e imballo rinforzato per stampe e ceramiche.</p>
+        </article>
+        <article>
+          <h3>Resi</h3>
+          <p>Reso entro 14 giorni su prodotti non personalizzati. Cambio o rimborso dopo verifica dello stato.</p>
+        </article>
+        <article>
+          <h3>Privacy</h3>
+          <p>I dati dei form demo non vengono inviati a server. In produzione si collega una privacy policy reale.</p>
+        </article>
+        <article>
+          <h3>Assistenza</h3>
+          <p>Risposta entro 24 ore lavorative per ordini, collaborazioni, personalizzazioni e richieste stampa.</p>
+        </article>
+      </div>
+    </section>
+
     <section class="section faq-section" id="faq">
       <div class="section-heading">
         <div>
@@ -247,6 +294,27 @@
         <h2>Parliamo del prossimo pezzo</h2>
       </div>
       <form class="contact-form">
+        <div class="form-grid">
+          <label>
+            Tipo progetto
+            <select name="projectType" required>
+              <option value="">Seleziona</option>
+              <option>Portfolio personale</option>
+              <option>Shop prodotti</option>
+              <option>Identità visiva</option>
+              <option>Collaborazione</option>
+            </select>
+          </label>
+          <label>
+            Timeline
+            <select name="timeline" required>
+              <option value="">Seleziona</option>
+              <option>Entro 2 settimane</option>
+              <option>Entro 1 mese</option>
+              <option>Progetto continuativo</option>
+            </select>
+          </label>
+        </div>
         <label>
           Nome
           <input type="text" name="name" placeholder="Il tuo nome" required>
@@ -282,6 +350,7 @@
     <div class="footer-links">
       <a href="#portfolio">Portfolio</a>
       <a href="#shop">Shop</a>
+      <a href="#policies">Policy</a>
       <a href="#faq">FAQ</a>
       <a href="#contact">Contatti</a>
     </div>
@@ -349,10 +418,29 @@
   <script type="application/ld+json">
     {
       "@context": "https://schema.org",
-      "@type": "Organization",
-      "name": "Atelier Nova",
-      "url": "https://deiddavd7.github.io/atelier-nova-shop/",
-      "description": "Portfolio shop indipendente per oggetti, stampe e micro-collezioni curate."
+      "@graph": [
+        {
+          "@type": "Organization",
+          "name": "Atelier Nova",
+          "url": "https://deiddavd7.github.io/atelier-nova-shop/",
+          "description": "Portfolio shop indipendente per oggetti, stampe e micro-collezioni curate."
+        },
+        {
+          "@type": "WebSite",
+          "name": "Atelier Nova",
+          "url": "https://deiddavd7.github.io/atelier-nova-shop/",
+          "inLanguage": "it-IT"
+        },
+        {
+          "@type": "ItemList",
+          "name": "Collezione pronta",
+          "itemListElement": [
+            { "@type": "Product", "position": 1, "name": "Stampa Alba, formato A3", "offers": { "@type": "Offer", "price": "42", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" } },
+            { "@type": "Product", "position": 2, "name": "Tazza ceramica salvia", "offers": { "@type": "Offer", "price": "34", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" } },
+            { "@type": "Product", "position": 3, "name": "Notebook tela grezza", "offers": { "@type": "Offer", "price": "26", "priceCurrency": "EUR", "availability": "https://schema.org/InStock" } }
+          ]
+        }
+      ]
     }
   </script>
   <script src="script.js"></script>

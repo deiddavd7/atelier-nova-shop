@@ -6,12 +6,23 @@ Nuovo progetto statico e indipendente per un portfolio shop online.
 
 Apri `index.html` nel browser.
 
+Per test locale:
+
+```bash
+python3 -m http.server 4173
+```
+
+Poi apri `http://localhost:4173`.
+
 ## Struttura
 
 - `index.html`: struttura delle sezioni, shop e carrello
 - `styles.css`: layout responsive e direzione visiva
 - `script.js`: prodotti, filtri, carrello e modulo contatti
 - `assets/hero-shop.png`: immagine hero generata per il progetto
+- `assets/studio-process.png`: immagine editoriale per la sezione processo
+- `.github/workflows/pages.yml`: deploy statico su GitHub Pages
+- `site.webmanifest`, `sitemap.xml`, `robots.txt`, `404.html`: file di pubblicazione
 
 ## Funzioni incluse
 
@@ -33,9 +44,14 @@ Apri `index.html` nel browser.
 - Ricerca, ordinamento e preferiti nello shop
 - Animazioni progressive, nav attiva e pulsante torna-su
 - Manifest PWA base e workflow GitHub Pages
+- Garanzie operative, policy, pagina 404 e sitemap
+- Dati strutturati JSON-LD per sito, organizzazione e prodotti
+- Form contatti con tipo progetto e timeline
 
 ## Prossimi step consigliati
 
 - Personalizzare nome, testi, prezzi e prodotti
 - Collegare il checkout a Stripe, Shopify Buy Button o WooCommerce
 - Collegare il form contatti a Formspree, Netlify Forms o backend dedicato
+- Attivare GitHub Pages da `Settings > Pages > Source: GitHub Actions`
+- Sostituire i contenuti demo con lavori, foto e casi studio reali
